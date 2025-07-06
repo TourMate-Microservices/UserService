@@ -1,7 +1,12 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\Code\\TourMate_Microservices\\UserService\\TourMate.UserService.Api\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F3FACC80-B7C2-4272-A4C7-305BA807FC60}|TourMate.UserService.Api\\TourMate.UserService.Api.csproj|d:\\code\\tourmate_microservices\\userservice\\tourmate.userservice.api\\tourmate.userservice.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{F3FACC80-B7C2-4272-A4C7-305BA807FC60}|TourMate.UserService.Api\\TourMate.UserService.Api.csproj|solutionrelative:tourmate.userservice.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +14,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Code\\TourMate_Microservices\\UserService\\TourMate.UserService.Api\\TourMate.UserService.Api\\appsettings.json",
+              "RelativeDocumentMoniker": "TourMate.UserService.Api\\appsettings.json",
+              "ToolTip": "D:\\Code\\TourMate_Microservices\\UserService\\TourMate.UserService.Api\\TourMate.UserService.Api\\appsettings.json",
+              "RelativeToolTip": "TourMate.UserService.Api\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-07-06T07:27:56.295Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
