@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TourMate.UserService.Repositories.Models;
 
 namespace TourMate.UserService.Services.IServices
 {
-    internal interface IAccountService
+    public interface IAccountService
     {
+        Task<Account> GetAccountByEmail(string email);
+        Task<Account> CreateAccount(Account account);
     }
 }

@@ -37,7 +37,6 @@ public partial class TourMateUserContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
        => optionsBuilder.UseSqlServer(GetConnectionString("DefaultConnection"));
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Account>(entity =>
@@ -118,6 +117,7 @@ public partial class TourMateUserContext : DbContext
             entity.Property(e => e.Address)
                 .HasMaxLength(255)
                 .HasColumnName("address");
+            entity.Property(e => e.AreaId).HasColumnName("areaId");
             entity.Property(e => e.BankAccountNumber)
                 .HasMaxLength(50)
                 .HasColumnName("bankAccountNumber");

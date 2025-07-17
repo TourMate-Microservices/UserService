@@ -10,5 +10,7 @@ namespace TourMate.UserService.Repositories.IRepositories
     public interface IAccountRepository
     {
         Task<Account> GetAccountByLogin(string email, string password);
+        Task<Account> GetAccountByEmail(string email);
+        Task<Account> CreateAndReturnAsync(Account account);
     }
 }

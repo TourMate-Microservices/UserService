@@ -35,5 +35,7 @@ public partial class TourGuide
 
     public string? Company { get; set; }
 
+    public int AreaId { get; set; }
+
     public virtual Account Account { get; set; } = null!;
 }

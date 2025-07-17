@@ -28,5 +28,24 @@ namespace TourMate.UserService.Repositories.Repositories
         {
             return await _context.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email && a.Password == password && a.Status);
         }
+
+        public async Task<Account> GetAccountByEmail(string email)
+        {
+            return await _context.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email);
+        }
+
+        public async Task<Account> CreateAndReturnAsync(Account account)
+        {
+            try
+            {
+                _context.Add(account);
+                await _context.SaveChangesAsync();
+                return account;
+            }
+            catch
+            {
+                return account;
+            }
+        }
     }
 }
