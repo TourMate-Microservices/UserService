@@ -12,12 +12,10 @@ namespace TourMate.UserService.Services.Utils
     public class TokenService
     {
         private readonly IConfiguration _config;
-        private readonly IAccountRepository _accountRepository;
 
-        public TokenService(IConfiguration config, IAccountRepository accountRepository)
+        public TokenService(IConfiguration config)
         {
             _config = config;
-            _accountRepository = accountRepository;
         }
 
         public string GenerateAccessToken(int accountId, string fullName, string roleName)

@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TourMate.UserService.Repositories.IRepositories;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Services.IServices;
 
 namespace TourMate.UserService.Services.Services
 {
-    public class CustomerService
+    public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _repository;
 

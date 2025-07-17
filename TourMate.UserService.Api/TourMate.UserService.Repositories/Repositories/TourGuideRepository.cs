@@ -6,10 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TourMate.UserService.Repositories.Context;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.IRepositories;
 
 namespace TourMate.UserService.Repositories.Repositories
 {
-    public class TourGuideRepository
+    public class TourGuideRepository : ITourGuideRepository
     {
         private TourMateUserContext _context;
 
