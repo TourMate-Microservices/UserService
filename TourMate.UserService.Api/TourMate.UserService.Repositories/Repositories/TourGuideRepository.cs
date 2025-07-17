@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourMate.UserService.Repositories.Context;
-using TourMate.UserService.Repositories.Models;
 using TourMate.UserService.Repositories.IRepositories;
+using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.ResponseModels;
 
 namespace TourMate.UserService.Repositories.Repositories
 {
@@ -41,6 +42,71 @@ namespace TourMate.UserService.Repositories.Repositories
             {
                 return false;
             }
+        }
+
+        public async Task<PagedResult<TourGuide>> GetTourGuidesByAreaAsync(int pageIndex, int pageSize, int areaId)
+        {
+            var query = _context.TourGuides
+                .Where(tg => tg.AreaId == areaId && tg.Account.Status == true);
+
+            // Tổng số bản ghi phù hợp
+            var totalCount = await query.CountAsync();
+
+            // Sắp xếp ngẫu nhiên & phân trang
+            var result = await query
+                .OrderBy(x => Guid.NewGuid()) // sắp xếp ngẫu nhiên
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+            return new PagedResult<TourGuide>
+            {
+                Data = result,
+                TotalCount = totalCount,
+                Page = pageIndex,
+                PerPage = pageSize,
+                TotalPages = totalPages,
+                HasNext = pageIndex < totalPages,
+                HasPrevious = pageIndex > 1
+            };
+        }
+
+
+        public async Task<PagedResult<TourGuide>> GetPagedTourGuide(int pageSize, int pageIndex, string fullName)
+        {
+            // Tạo truy vấn từ DbSet
+            var query = _context.TourGuides.AsQueryable();
+
+            // Lọc theo tên nếu có
+            if (!string.IsNullOrEmpty(fullName))
+            {
+                query = query.Where(t => t.FullName.Contains(fullName));
+            }
+
+            // Tổng số bản ghi sau khi lọc
+            var totalCount = await query.CountAsync();
+
+            // Lấy danh sách dữ liệu trang hiện tại
+            var result = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // Tính tổng số trang
+            var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+            return new PagedResult<TourGuide>
+            {
+                Data = result,
+                TotalCount = totalCount,
+                Page = pageIndex,
+                PerPage = pageSize,
+                TotalPages = totalPages,
+                HasNext = pageIndex < totalPages,
+                HasPrevious = pageIndex > 1
+            };
         }
     }
 }
