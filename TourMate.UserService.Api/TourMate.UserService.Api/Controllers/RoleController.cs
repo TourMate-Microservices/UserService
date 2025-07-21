@@ -4,7 +4,7 @@ using TourMate.UserService.Repositories.RequestModels;
 
 namespace TourMate.UserService.Api.Controllers
 {
-    [Route("api/roles")]
+    [Route("api/v1/roles")]
     [ApiController]
     public class RoleController : ControllerBase
     {

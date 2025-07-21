@@ -2,12 +2,13 @@
 using System.Text.Json;
 using TourMate.UserService.Repositories.Models;
 using TourMate.UserService.Repositories.RequestModels;
+using TourMate.UserService.Repositories.ResponseModels;
 using TourMate.UserService.Services.IServices;
 using TourMate.UserService.Services.Utils;
 
 namespace TourMate.UserService.Api.Controllers
 {
-    [Route("api/accounts")]
+    [Route("api/v1/accounts")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -20,6 +21,22 @@ namespace TourMate.UserService.Api.Controllers
             _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
             _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
             _tourGuideService = tourGuideService ?? throw new ArgumentNullException(nameof(tourGuideService));
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<AuthResponse>> Login([FromBody] UserLogin loginRequest)
+        {
+            // Cố gắng đăng nhập với email và mật khẩu đã cung cấp
+            var login = await _accountService.LoginAsync(loginRequest.Email, loginRequest.Password);
+
+            // Nếu đăng nhập không thành công, trả về BadRequest với thông báo lỗi
+            if (login == null)
+            {
+                return BadRequest(new { msg = "Tài khoản hoặc mật khẩu không đúng." });
+            }
+
+            // Nếu đăng nhập thành công, trả về phản hồi đăng nhập
+            return Ok(login);
         }
 
         [HttpPost("register-tourguide")]
@@ -94,10 +111,8 @@ namespace TourMate.UserService.Api.Controllers
         [HttpPost("register-customer")]
         public async Task<ActionResult> RegisterCustomer(RegisterCustomer request)
         {
-            DateOnly dateOfBirth = DateOnly.FromDateTime(request.DateOfBirth);
-
             // Kiểm tra dữ liệu nhập
-            if (request.Email != null || request.Password != null || request.FullName != null ||request.Gender != null || request.Phone != null || string.IsNullOrEmpty((request.DateOfBirth.ToString())))
+            if (request.Email == null || request.Password == null || request.FullName == null ||request.Gender == null || request.Phone == null || string.IsNullOrEmpty((request.DateOfBirth.ToString())))
                 return BadRequest(new { msg = "Thông tin tài khoản chưa đầy đủ." });
 
             if (!ValidInput.IsPhoneFormatted(request.Phone.Trim()))
@@ -140,7 +155,7 @@ namespace TourMate.UserService.Api.Controllers
                 FullName = request.FullName,
                 Gender = request.Gender,
                 Phone = request.Phone,
-                DateOfBirth = dateOfBirth,
+                DateOfBirth = request.DateOfBirth,
             };
 
             // Lưu khách hàng

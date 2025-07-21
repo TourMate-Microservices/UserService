@@ -7,7 +7,7 @@ using TourMate.UserService.Services.Services;
 
 namespace TourMate.UserService.Api.Controllers
 {
-    [Route("api/tour-guides")]
+    [Route("api/v1/tour-guides")]
     [ApiController]
     public class TourGuideController : ControllerBase
     {

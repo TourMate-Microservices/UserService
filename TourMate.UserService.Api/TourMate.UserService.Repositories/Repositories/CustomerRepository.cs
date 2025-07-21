@@ -74,13 +74,13 @@ namespace TourMate.UserService.Repositories.Repositories
 
             return new PagedResult<Customer>
             {
-                Data = result,
-                TotalCount = totalCount,
-                Page = pageIndex,
-                PerPage = pageSize,
-                TotalPages = totalPages,
-                HasNext = pageIndex < totalPages,
-                HasPrevious = pageIndex > 1
+                data = result,
+                total_count = totalCount,
+                page = pageIndex,
+                per_page = pageSize,
+                total_pages = totalPages,
+                has_next = pageIndex < totalPages,
+                has_previous = pageIndex > 1
             };
         }
     }
