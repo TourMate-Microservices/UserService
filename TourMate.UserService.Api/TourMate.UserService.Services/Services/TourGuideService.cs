@@ -38,5 +38,10 @@ namespace TourMate.UserService.Services.Services
         {
             return await _repository.GetPagedTourGuide(pageSize, pageIndex, fullName);
         }
+
+        public async Task<List<TourGuide>> GetOtherTourGuidesAsync(int tourGuideId, int pageSize)
+        {
+            return await _repository.GetOtherTourGuides(tourGuideId, pageSize);
+        }
     }
 }

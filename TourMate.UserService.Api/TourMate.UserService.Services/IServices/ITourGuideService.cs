@@ -14,5 +14,6 @@ namespace TourMate.UserService.Services.IServices
         Task<bool> CreateTourGuide(TourGuide tourguide);
         Task<PagedResult<TourGuide>> GetPagedTourGuidesAsync(int pageIndex, int pageSize, string fullName);
         Task<PagedResult<TourGuide>> GetTourGuidesByAreaAsync(int areaId, int pageIndex, int pageSize);
+        Task<List<TourGuide>> GetOtherTourGuidesAsync(int tourGuideId, int pageSize);
     }
 }

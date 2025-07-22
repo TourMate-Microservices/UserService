@@ -14,5 +14,6 @@ namespace TourMate.UserService.Repositories.IRepositories
         Task<bool> CreateAsync(TourGuide tourGuide);
         Task<PagedResult<TourGuide>> GetTourGuidesByAreaAsync(int pageIndex, int pageSize, int areaId);
         Task<PagedResult<TourGuide>> GetPagedTourGuide(int pageSize, int pageIndex, string fullName);
+        Task<List<TourGuide>> GetOtherTourGuides(int excludeId, int pageSize);
     }
 }

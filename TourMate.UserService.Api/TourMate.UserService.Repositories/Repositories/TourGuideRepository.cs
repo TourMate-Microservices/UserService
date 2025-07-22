@@ -108,5 +108,17 @@ namespace TourMate.UserService.Repositories.Repositories
                 has_previous = pageIndex > 1
             };
         }
+
+        public async Task<List<TourGuide>> GetOtherTourGuides(int excludeId, int pageSize)
+        {
+            var result = await _context.TourGuides
+    .Where(x => x.TourGuideId != excludeId)
+    .OrderBy(x => Guid.NewGuid())  // Sắp xếp ngẫu nhiên
+    .Take(pageSize)  // Giới hạn số lượng kết quả theo pageSize
+    .ToListAsync();
+
+
+            return result;
+        }
     }
 }
