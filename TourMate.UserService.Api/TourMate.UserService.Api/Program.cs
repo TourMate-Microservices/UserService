@@ -4,6 +4,7 @@ using TourMate.UserService.Repositories.Repositories;
 using TourMate.UserService.Services.IServices;
 using TourMate.UserService.Services.Services;
 using TourMate.UserService.Services.Utils;
+using TourMate.UserService.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,9 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+
+// Add gRPC client
+builder.Services.AddScoped<ITourServiceGrpcClient, TourServiceGrpcClient>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
