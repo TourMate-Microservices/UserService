@@ -32,6 +32,11 @@ namespace TourMate.UserService.Services.Services
             return await _repository.GetAccountByEmail(email);
         }
 
+        public async Task<Account> GetAccountByIdAsync(int accountId)
+        {
+            return await _repository.GetAccountByIdAsync(accountId);
+        }
+
         public async Task<Account> CreateAccount(Account account)
         {
             // Gọi phương thức bất đồng bộ để tạo tài khoản

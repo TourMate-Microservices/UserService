@@ -11,6 +11,7 @@ namespace TourMate.UserService.Repositories.IRepositories
     {
         Task<Account> GetAccountByLogin(string email, string password);
         Task<Account> GetAccountByEmail(string email);
+        Task<Account> GetAccountByIdAsync(int accountId);
         Task<Account> CreateAndReturnAsync(Account account);
     }
 }

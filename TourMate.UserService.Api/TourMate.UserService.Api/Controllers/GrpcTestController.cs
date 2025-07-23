@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TourMate.UserService.Api.Grpc.IServices;
+using TourMate.UserService.Api.Services;
 
 namespace TourMate.UserService.Api.Controllers
 {

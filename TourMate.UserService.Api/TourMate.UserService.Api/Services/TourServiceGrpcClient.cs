@@ -1,9 +1,13 @@
 using Grpc.Net.Client;
 using TourMate.Grpc;
-using TourMate.UserService.Api.Grpc.IServices;
 
-namespace TourMate.UserService.Api.Grpc.Services
+namespace TourMate.UserService.Api.Services
 {
+    public interface ITourServiceGrpcClient
+    {
+        Task<TourServiceList> GetToursByTourGuideIdAsync(int tourGuideId);
+        Task<TourServiceList> GetNumOfTourByTourGuideId(int tourGuideId, int numOfTours);
+    }
     public class TourServiceGrpcClient : ITourServiceGrpcClient, IDisposable
     {
         private readonly GrpcChannel _channel;

@@ -34,6 +34,11 @@ namespace TourMate.UserService.Repositories.Repositories
             return await _context.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.Email == email);
         }
 
+        public async Task<Account> GetAccountByIdAsync(int accountId)
+        {
+            return await _context.Accounts.Include(a => a.Role).FirstOrDefaultAsync(a => a.AccountId == accountId);
+        }
+
         public async Task<Account> CreateAndReturnAsync(Account account)
         {
             try

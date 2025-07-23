@@ -10,7 +10,9 @@ namespace TourMate.UserService.Services.IServices
 {
     public interface ITourGuideService
     {
+        Task<List<TourGuide>> GetRandomTourGuidesAsync(int number);
         Task<TourGuide> GetTourGuideByAccId(int accId);
+        Task<TourGuide> GetTourGuideById(int id);
         Task<bool> CreateTourGuide(TourGuide tourguide);
         Task<PagedResult<TourGuide>> GetPagedTourGuidesAsync(int pageIndex, int pageSize, string fullName);
         Task<PagedResult<TourGuide>> GetTourGuidesByAreaAsync(int areaId, int pageIndex, int pageSize);

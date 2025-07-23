@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourMate.UserService.Repositories.IRepositories;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.Repositories;
 using TourMate.UserService.Repositories.ResponseModels;
 using TourMate.UserService.Services.IServices;
 
@@ -17,6 +18,15 @@ namespace TourMate.UserService.Services.Services
         public TourGuideService(ITourGuideRepository repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+        public async Task<List<TourGuide>> GetRandomTourGuidesAsync(int number)
+        {
+            return await _repository.GetRandomTourGuidesAsync(number);
+        }
+
+        public async Task<TourGuide> GetTourGuideById(int id)
+        {
+            return await _repository.GetById(id);
         }
 
         public async Task<TourGuide> GetTourGuideByAccId(int accId)

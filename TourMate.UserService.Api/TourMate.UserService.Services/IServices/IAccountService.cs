@@ -11,6 +11,7 @@ namespace TourMate.UserService.Services.IServices
     public interface IAccountService
     {
         Task<Account> GetAccountByEmail(string email);
+        Task<Account> GetAccountByIdAsync(int accountId);
         Task<Account> CreateAccount(Account account);
         Task<AuthResponse> LoginAsync(string email, string password);
     }

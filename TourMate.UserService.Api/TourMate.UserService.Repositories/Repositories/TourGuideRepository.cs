@@ -25,9 +25,23 @@ namespace TourMate.UserService.Repositories.Repositories
             _context = context;
         }
 
+        public async Task<List<TourGuide>> GetRandomTourGuidesAsync(int number)
+        {
+            return await _context.TourGuides
+                .OrderBy(g => Guid.NewGuid()) // random
+                .Take(number)
+                .ToListAsync();
+        }
+
+
         public async Task<TourGuide> GetByAccId(int accId)
         {
             return await _context.TourGuides.Include(a => a.Account).FirstOrDefaultAsync(x => x.AccountId == accId);
+        }
+
+        public async Task<TourGuide> GetById(int id)
+        {
+            return await _context.TourGuides.FirstOrDefaultAsync(x => x.TourGuideId == id);
         }
 
         public async Task<bool> CreateAsync(TourGuide tourGuide)

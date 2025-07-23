@@ -4,12 +4,27 @@ using TourMate.UserService.Repositories.Repositories;
 using TourMate.UserService.Services.IServices;
 using TourMate.UserService.Services.Services;
 using TourMate.UserService.Services.Utils;
-using TourMate.UserService.Api.Grpc.Services;
-using TourMate.UserService.Api.Grpc.IServices;
+using TourMate.UserService.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.UseUrls("http://0.0.0.0:5000");
+
+// Configure Kestrel to listen on both HTTP and gRPC ports
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // HTTP endpoint for REST API
+    options.ListenAnyIP(5000, listenOptions =>
+    {
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1;
+    });
+    
+    // gRPC endpoint
+    options.ListenAnyIP(9092, listenOptions =>
+    {
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2;
+    });
+});
 
 // Đăng ký CORS
 builder.Services.AddCors(options =>
@@ -43,6 +58,9 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 // Add gRPC client
 builder.Services.AddScoped<ITourServiceGrpcClient, TourServiceGrpcClient>();
+
+// Add gRPC server
+builder.Services.AddGrpc();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -90,5 +108,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Map gRPC service
+app.MapGrpcService<UserGrpcService>();
 
 app.Run();
