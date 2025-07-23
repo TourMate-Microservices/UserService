@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TourMate.UserService.Api.Services;
+using TourMate.UserService.Api.Grpc.IServices;
 
 namespace TourMate.UserService.Api.Controllers
 {
@@ -30,6 +30,44 @@ namespace TourMate.UserService.Api.Controllers
                 
                 var tours = await _tourServiceGrpcClient.GetToursByTourGuideIdAsync(tourGuideId);
                 
+                var result = new
+                {
+                    TourGuideId = tourGuideId,
+                    TotalTours = tours.Items.Count,
+                    Tours = tours.Items.Select(tour => new
+                    {
+                        tour.ServiceId,
+                        tour.ServiceName,
+                        tour.Price,
+                        tour.Duration,
+                        tour.Content,
+                        tour.Image,
+                        tour.CreatedDate,
+                        tour.IsDeleted,
+                        tour.Title,
+                        tour.TourDesc,
+                        tour.AreaId
+                    }).ToList()
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error testing gRPC call for tourGuideId: {TourGuideId}", tourGuideId);
+                return StatusCode(500, new { message = "Error calling TourService via gRPC", error = ex.Message });
+            }
+        }
+
+        [HttpGet("num-of-tours")]
+        public async Task<IActionResult> GetNumOfTourByTourGuideId(int tourGuideId, int numsOfTour)
+        {
+            try
+            {
+                _logger.LogInformation("Testing gRPC call for tourGuideId: {TourGuideId}", tourGuideId);
+
+                var tours = await _tourServiceGrpcClient.GetNumOfTourByTourGuideId(tourGuideId, numsOfTour);
+
                 var result = new
                 {
                     TourGuideId = tourGuideId,

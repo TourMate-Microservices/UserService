@@ -1,13 +1,9 @@
 using Grpc.Net.Client;
 using TourMate.Grpc;
+using TourMate.UserService.Api.Grpc.IServices;
 
-namespace TourMate.UserService.Api.Services
+namespace TourMate.UserService.Api.Grpc.Services
 {
-    public interface ITourServiceGrpcClient
-    {
-        Task<TourServiceList> GetToursByTourGuideIdAsync(int tourGuideId);
-    }
-
     public class TourServiceGrpcClient : ITourServiceGrpcClient, IDisposable
     {
         private readonly GrpcChannel _channel;
@@ -58,6 +54,32 @@ namespace TourMate.UserService.Api.Services
                 throw;
             }
         }
+
+        public async Task<TourServiceList> GetNumOfTourByTourGuideId(int tourGuideId, int numOfTours)
+        {
+            try
+            {
+                _logger.LogInformation("Calling GetByTourGuideId for tourGuideId: {TourGuideId}", tourGuideId);
+
+                var request = new TourGuideIdRequestAnNumberOfTours
+                {
+                    TourGuideId = tourGuideId,
+                    NumberOfTours = numOfTours
+                };
+
+                var response = await _client.GetNumOfTourByTourGuideIdAsync(request);
+
+                _logger.LogInformation("Received {Count} tours for tourGuideId: {TourGuideId}",
+                    response.Items.Count, tourGuideId);
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error calling TourService gRPC for tourGuideId: {TourGuideId}", tourGuideId);
+                throw;
+            }
+        }   
 
         public void Dispose()
         {

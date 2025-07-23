@@ -9,11 +9,19 @@ package tourservice;
 
 service TourService {
   rpc GetByTourGuideId (TourGuideIdRequest) returns (TourServiceList);
+  rpc GetNumOfTourByTourGuideId (TourGuideIdRequestAnNumberOfTours) returns (TourServiceList);
 }
 
 message TourGuideIdRequest {
   int32 tourGuideId = 1;
 }
+
+message TourGuideIdRequestAnNumberOfTours {
+  int32 tourGuideId = 1;
+  int32 numberOfTours = 2; // <--- thêm dòng này
+}
+
+
 
 message TourServiceItem {
   int32 serviceId = 1;

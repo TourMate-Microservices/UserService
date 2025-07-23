@@ -4,7 +4,8 @@ using TourMate.UserService.Repositories.Repositories;
 using TourMate.UserService.Services.IServices;
 using TourMate.UserService.Services.Services;
 using TourMate.UserService.Services.Utils;
-using TourMate.UserService.Api.Services;
+using TourMate.UserService.Api.Grpc.Services;
+using TourMate.UserService.Api.Grpc.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
