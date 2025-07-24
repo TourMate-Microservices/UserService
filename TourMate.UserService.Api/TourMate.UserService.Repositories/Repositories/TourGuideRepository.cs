@@ -61,7 +61,7 @@ namespace TourMate.UserService.Repositories.Repositories
         public async Task<PagedResult<TourGuide>> GetTourGuidesByAreaAsync(int pageIndex, int pageSize, int areaId)
         {
             var query = _context.TourGuides
-                .Where(tg => tg.AreaId == areaId && tg.Account.Status == true);
+                .Where(tg => tg.AreaId == areaId);
 
             // Tổng số bản ghi phù hợp
             var totalCount = await query.CountAsync();

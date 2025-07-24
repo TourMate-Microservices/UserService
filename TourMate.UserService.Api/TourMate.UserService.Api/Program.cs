@@ -59,8 +59,9 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 // Add gRPC client
 builder.Services.AddScoped<ITourServiceGrpcClient, TourServiceGrpcClient>();
 
-// Add gRPC server
+// Add gRPC server and UserGrpcService
 builder.Services.AddGrpc();
+builder.Services.AddScoped<UserGrpcService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -111,5 +112,6 @@ app.MapControllers();
 
 // Map gRPC service
 app.MapGrpcService<UserGrpcService>();
+
 
 app.Run();

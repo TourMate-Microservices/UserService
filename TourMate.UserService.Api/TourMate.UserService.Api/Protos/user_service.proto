@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package pb;
+package userservice;
 
-option csharp_namespace = "TourMate.UserService.Api.Grpc";
+option csharp_namespace = "userservice";
 
 // Request message with user ID
 message GetUserByIdRequest {
@@ -54,8 +54,13 @@ message AreaDetailResponse {
     repeated AreaData other = 8;
 }
 
+message AreaTourGuideResponse {
+    repeated TourGuideResponse tourGuide = 7;
+}
+
+
 // gRPC service definition
 service UserService {
     rpc GetUser(GetUserByIdRequest) returns (User);
-    rpc GetAreaDetail(GetAreaDetailRequest) returns (AreaDetailResponse);
+    rpc GetNumTourGuideByAreaId(GetAreaDetailRequest) returns (AreaTourGuideResponse);
 }
