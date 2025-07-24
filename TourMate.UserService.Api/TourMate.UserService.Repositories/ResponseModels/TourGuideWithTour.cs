@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TourMate.UserService.Repositories.Models;
 
 namespace TourMate.UserService.Repositories.ResponseModels
 {
@@ -26,5 +27,12 @@ namespace TourMate.UserService.Repositories.ResponseModels
         public string ServiceName { get; set; } = null!;
         public string Title { get; set; } = null!;
         public string Image { get; set; } = null!;
+        public DateTime CreatedDate { get; set; }
+    }
+
+    public class TourGuideDetailWithTour
+    {
+        public TourGuide TourGuide { get; set; } = null!;
+        public PagedResult<TourOfTourGuide> Tours { get; set; }
     }
 }

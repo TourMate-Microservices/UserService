@@ -16,7 +16,46 @@ message User {
     string email = 3;
 }
 
+// Request message for area detail
+message GetAreaDetailRequest {
+    int32 areaId = 1;
+    int32 tourGuideQuantity = 2;
+}
+
+// Tour Guide message
+message TourGuideResponse {
+    int32 tourGuideId = 1;
+    string fullName = 2;
+    string image = 3;
+    int32 yearOfExperience = 4;
+    string description = 5;
+    string company = 6;
+}
+
+// Area Data message for other areas
+message AreaData {
+    int32 areaId = 1;
+    string areaName = 2;
+    string areaTitle = 3;
+    string areaSubtitle = 4;
+    string areaContent = 5;
+    string bannerImg = 6;
+}
+
+// Area Detail Response message
+message AreaDetailResponse {
+    int32 areaId = 1;
+    string areaName = 2;
+    string areaTitle = 3;
+    string areaSubtitle = 4;
+    string areaContent = 5;
+    string bannerImg = 6;
+    repeated TourGuideResponse tourGuide = 7;
+    repeated AreaData other = 8;
+}
+
 // gRPC service definition
 service UserService {
     rpc GetUser(GetUserByIdRequest) returns (User);
+    rpc GetAreaDetail(GetAreaDetailRequest) returns (AreaDetailResponse);
 }

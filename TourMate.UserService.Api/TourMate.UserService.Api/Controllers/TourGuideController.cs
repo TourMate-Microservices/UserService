@@ -106,5 +106,64 @@ namespace TourMate.UserService.Api.Controllers
                 return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
             }
         }
+
+        [HttpGet("by-id-with-tours-paged")]
+        public async Task<IActionResult> GetTourGuideByIdWithToursPaged(
+    [FromQuery] int id,
+    [FromQuery] int page = 1,
+    [FromQuery] int perPage = 5)
+        {
+            try
+            {
+                // 1. Lấy guide theo ID
+                var guide = await _tourGuideService.GetTourGuideById(id);
+
+                if (guide == null)
+                    return NotFound(new { message = "Tour guide not found." });
+
+                // 2. Gọi gRPC lấy tất cả tour theo guideId
+                var grpcResponse = await _tourServiceGrpcClient.GetToursByTourGuideIdAsync(id);
+
+                var totalTours = grpcResponse.Items.Count;
+                var totalPages = (int)Math.Ceiling((double)totalTours / perPage);
+
+                // 3. Lấy tour theo trang hiện tại
+                var pagedTours = grpcResponse.Items
+                    .Skip((page - 1) * perPage)
+                    .Take(perPage)
+                    .Select(t => new TourOfTourGuide
+                    {
+                        ServiceId = t.ServiceId,
+                        ServiceName = t.ServiceName,
+                        Title = t.Title,
+                        Image = t.Image,
+                        CreatedDate = DateTime.TryParse(t.CreatedDate, out var createdDate) ? createdDate : default,
+
+                    }).ToList();
+
+                // 4. Gộp dữ liệu
+                var result = new TourGuideDetailWithTour
+                {
+                    TourGuide  = guide,
+
+                    Tours = new PagedResult<TourOfTourGuide>
+                    {
+                        data = pagedTours,
+                        total_count = totalTours,
+                        page = page,
+                        per_page = perPage,
+                        total_pages = totalPages,
+                        has_next = page < totalPages,
+                        has_previous = page > totalPages
+                    }
+                };
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
     }
 }
