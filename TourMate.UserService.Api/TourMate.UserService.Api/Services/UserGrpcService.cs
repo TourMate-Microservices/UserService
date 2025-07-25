@@ -52,6 +52,44 @@ namespace TourMate.UserService.Api.Services
             }
         }
 
+        public override async Task<TourGuideResponse> GetTourGuideById(GetTourGuideByIdRequest request, ServerCallContext context)
+        {
+            try
+            {
+                _logger.LogInformation("Getting tour guide with ID: {TourGuideId}", request.TourGuideId);
+
+                var tourGuide = await _tourGuideService.GetTourGuideById(request.TourGuideId);
+
+                if (tourGuide == null)
+                {
+                    _logger.LogWarning("Tour guide with ID {TourGuideId} not found", request.TourGuideId);
+                    throw new RpcException(new Status(StatusCode.NotFound, $"Tour guide with ID {request.TourGuideId} not found"));
+                }
+
+                var grpcData = new TourGuideResponse
+                {
+                    TourGuideId = tourGuide.TourGuideId,
+                    FullName = tourGuide.FullName,
+                    Image = tourGuide.Image,
+                    YearOfExperience = tourGuide.YearOfExperience ?? 0,
+                    Description = tourGuide.Description,
+                    Company = tourGuide.Company,
+                };
+
+                _logger.LogInformation("Successfully retrieved tour guide: {UserEmail}", tourGuide.FullName);
+                return grpcData;
+            }
+            catch (RpcException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting user with ID: {UserId}", request.TourGuideId);
+                throw new RpcException(new Status(StatusCode.Internal, "Internal server error"));
+            }
+        }
+
         public override async Task<AreaTourGuideResponse> GetNumTourGuideByAreaId(GetAreaDetailRequest request, ServerCallContext context)
         {
             try
