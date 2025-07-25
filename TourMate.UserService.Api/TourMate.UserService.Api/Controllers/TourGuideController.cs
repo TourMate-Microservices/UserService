@@ -37,7 +37,7 @@ namespace TourMate.UserService.Api.Controllers
         }
 
         [HttpGet("paged")]
-        public async Task<IActionResult> GetPagedTourGuides([FromQuery] string fullName, [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetPagedTourGuides([FromQuery] string? fullName, [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
         {
             var result = await _tourGuideService.GetPagedTourGuidesAsync(pageIndex, pageSize, fullName);
             return Ok(result);

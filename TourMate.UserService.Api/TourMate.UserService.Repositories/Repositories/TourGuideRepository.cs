@@ -88,7 +88,7 @@ namespace TourMate.UserService.Repositories.Repositories
         }
 
 
-        public async Task<PagedResult<TourGuide>> GetPagedTourGuide(int pageSize, int pageIndex, string fullName)
+        public async Task<PagedResult<TourGuide>> GetPagedTourGuide(int pageSize, int pageIndex, string? fullName)
         {
             // Tạo truy vấn từ DbSet
             var query = _context.TourGuides.AsQueryable();
