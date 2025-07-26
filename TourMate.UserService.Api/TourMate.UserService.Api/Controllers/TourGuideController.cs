@@ -50,6 +50,20 @@ namespace TourMate.UserService.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<TourGuide>> getById(int id)
+        {
+            try
+            {
+                var result = await _tourGuideService.GetTourGuideById(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Something went wrong", error = ex.Message });
+            }
+        }
+
         [HttpGet("other")]
         public async Task<IActionResult> GetOtherTourGuide([FromQuery] int tourGuideId, [FromQuery] int pageSize)
         {
