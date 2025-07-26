@@ -49,7 +49,7 @@ namespace TourMate.UserService.Services.Services
             return await _repository.GetTourGuidesByAreaAsync(pageIndex, pageSize, areaId);
         }
 
-        public async Task<PagedResult<TourGuide>> GetPagedTourGuidesAsync(int pageIndex, int pageSize, string fullName)
+        public async Task<PagedResult<TourGuide>> GetPagedTourGuidesAsync(int pageIndex, int pageSize, string? fullName)
         {
             return await _repository.GetPagedTourGuide(pageSize, pageIndex, fullName);
         }
