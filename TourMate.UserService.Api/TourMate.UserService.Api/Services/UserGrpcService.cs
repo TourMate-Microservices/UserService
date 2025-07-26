@@ -8,13 +8,15 @@ namespace TourMate.UserService.Api.Services
     {
         private readonly IAccountService _accountService;
         private readonly ITourGuideService _tourGuideService;
+        private readonly ICustomerService _customerService;
         private readonly ILogger<UserGrpcService> _logger;
 
-        public UserGrpcService(IAccountService accountService, ITourGuideService tourGuideService, ILogger<UserGrpcService> logger)
+        public UserGrpcService(IAccountService accountService, ITourGuideService tourGuideService, ILogger<UserGrpcService> logger, ICustomerService customerService)
         {
             _accountService = accountService;
             _tourGuideService = tourGuideService;
             _logger = logger;
+            _customerService = customerService;
         }
 
         public override async Task<User> GetUser(GetUserByIdRequest request, ServerCallContext context)
@@ -74,6 +76,7 @@ namespace TourMate.UserService.Api.Services
                     YearOfExperience = tourGuide.YearOfExperience ?? 0,
                     Description = tourGuide.Description,
                     Company = tourGuide.Company,
+                    Phone = tourGuide.Phone ?? "",
                 };
 
                 _logger.LogInformation("Successfully retrieved tour guide: {UserEmail}", tourGuide.FullName);
@@ -86,6 +89,44 @@ namespace TourMate.UserService.Api.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting user with ID: {UserId}", request.TourGuideId);
+                throw new RpcException(new Status(StatusCode.Internal, "Internal server error"));
+            }
+        }
+
+        public override async Task<CustomerResponse> GetCustomerById(GetCustomerByIdRequest request, ServerCallContext context)
+        {
+            try
+            {
+                _logger.LogInformation("Getting customer with ID: {CustomerId}", request.CustomerId);
+
+                var customer = await _customerService.GetCustomerById(request.CustomerId);
+
+                if (customer == null)
+                {
+                    _logger.LogWarning("Customer with ID {CustomerId} not found", request.CustomerId);
+                    throw new RpcException(new Status(StatusCode.NotFound, $"Customer with ID {request.CustomerId} not found"));
+                }
+
+                var grpcData = new CustomerResponse
+                {
+                    CustomerId = customer.CustomerId,
+                    FullName = customer.FullName,
+                    Image = customer.Image,
+                    Phone = customer.Phone ?? "",
+                    Gender = customer.Gender,
+                    Email = customer.Account.Email,
+                };
+
+                _logger.LogInformation("Successfully retrieved customer: {UserEmail}", customer.FullName);
+                return grpcData;
+            }
+            catch (RpcException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting user with ID: {UserId}", request.CustomerId);
                 throw new RpcException(new Status(StatusCode.Internal, "Internal server error"));
             }
         }
@@ -116,7 +157,8 @@ namespace TourMate.UserService.Api.Services
                         Image = guide.Image ?? "",
                         YearOfExperience = guide.YearOfExperience ?? 0,
                         Description = guide.Description ?? "",
-                        Company = guide.Company ?? ""
+                        Company = guide.Company ?? "",
+                        Phone = guide.Phone ?? ""
                     });
                 }
 

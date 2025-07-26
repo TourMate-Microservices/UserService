@@ -14,5 +14,6 @@ namespace TourMate.UserService.Services.IServices
         Task<bool> CreateCustomer(Customer customer);
         Task<Customer> GetCustomerByPhone(string phone);
         Task<PagedResult<Customer>> GetPagedCustomersAsync(int pageIndex, int pageSize, string fullName);
+        Task<Customer> GetCustomerById(int id);
     }
 }

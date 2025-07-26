@@ -33,6 +33,39 @@ namespace TourMate.UserService.Repositories.Repositories
                 .ToListAsync();
         }
 
+        public async Task<PagedResult<TourGuide>> GetList(int pageSize, int pageIndex, string? name, int? areaId)
+        {
+            name = name?.ToLower() ?? "";
+
+            var query = _context.TourGuides
+                .Where(x =>
+                    (string.IsNullOrEmpty(name) || x.FullName.ToLower().Contains(name)) &&
+                    (areaId == null || x.AreaId == areaId)
+                );
+
+            // 👇 Lấy tổng số kết quả TRƯỚC khi phân trang
+            var totalResult = await query.CountAsync();
+
+            var result = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var totalPages = (int)Math.Ceiling((double)totalResult / pageSize);
+
+            return new PagedResult<TourGuide>
+            {
+                data = result,
+                total_count = totalResult,
+                page = pageIndex,
+                per_page = pageSize,
+                total_pages = totalPages,
+                has_next = pageIndex < totalPages,
+                has_previous = pageIndex > 1
+            };
+        }
+
+
 
         public async Task<TourGuide> GetByAccId(int accId)
         {

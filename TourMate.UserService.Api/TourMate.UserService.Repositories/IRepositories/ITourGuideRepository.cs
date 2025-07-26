@@ -10,6 +10,7 @@ namespace TourMate.UserService.Repositories.IRepositories
 {
     public interface ITourGuideRepository
     {
+        Task<PagedResult<TourGuide>> GetList(int pageSize, int pageIndex, string? name, int? areaId);
         Task<List<TourGuide>> GetRandomTourGuidesAsync(int number);
         Task<TourGuide> GetByAccId(int accId);
         Task<TourGuide> GetById(int id);

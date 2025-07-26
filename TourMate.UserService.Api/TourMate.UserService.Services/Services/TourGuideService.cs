@@ -19,6 +19,11 @@ namespace TourMate.UserService.Services.Services
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
+
+        public async Task<PagedResult<TourGuide>> GetList(int pageSize, int pageIndex, string? name, int? areaId)
+        {
+            return await _repository.GetList(pageSize, pageIndex, name, areaId);
+        }
         public async Task<List<TourGuide>> GetRandomTourGuidesAsync(int number)
         {
             return await _repository.GetRandomTourGuidesAsync(number);

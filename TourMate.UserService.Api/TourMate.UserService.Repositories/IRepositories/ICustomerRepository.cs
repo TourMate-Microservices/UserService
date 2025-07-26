@@ -10,6 +10,7 @@ namespace TourMate.UserService.Repositories.IRepositories
 {
     public interface ICustomerRepository
     {
+        Task<Customer> GetById(int id);
         Task<Customer> GetByAccId(int accId);
         Task<Customer> GetByPhone(string phone);
         Task<bool> CreateAsync(Customer customer);

@@ -22,6 +22,13 @@ namespace TourMate.UserService.Api.Controllers
             _tourServiceGrpcClient = tourServiceGrpcClient ?? throw new ArgumentNullException(nameof(tourServiceGrpcClient));
         }
 
+        [HttpGet("get-list")]
+        public async Task<ActionResult<PagedResult<TourGuide>>> GetFromClient(int? areaId, string? name = "", int pageSize = 10, int pageIndex = 1)
+        {
+            var result = await _tourGuideService.GetList(pageSize, pageIndex, name, areaId);
+            return Ok(result);
+        }
+
         [HttpGet("get-by-area")]
         public async Task<IActionResult> GetTourGuidesByArea([FromQuery] int pageIndex, [FromQuery] int pageSize, [FromQuery] int areaId)
         {

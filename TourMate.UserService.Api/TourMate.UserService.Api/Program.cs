@@ -1,10 +1,11 @@
 ﻿using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
+using TourMate.UserService.Api.Services;
 using TourMate.UserService.Repositories.IRepositories;
 using TourMate.UserService.Repositories.Repositories;
 using TourMate.UserService.Services.IServices;
 using TourMate.UserService.Services.Services;
 using TourMate.UserService.Services.Utils;
-using TourMate.UserService.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,7 +64,12 @@ builder.Services.AddScoped<ITourServiceGrpcClient, TourServiceGrpcClient>();
 builder.Services.AddGrpc();
 builder.Services.AddScoped<UserGrpcService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

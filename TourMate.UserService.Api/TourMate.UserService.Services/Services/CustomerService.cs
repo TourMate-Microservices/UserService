@@ -24,6 +24,11 @@ namespace TourMate.UserService.Services.Services
             return await _repository.GetByAccId(accId);
         }
 
+        public async Task<Customer> GetCustomerById(int id)
+        {
+            return await _repository.GetById(id);
+        }
+
         public async Task<Customer> GetCustomerByPhone(string phone)
         {
             return await _repository.GetByPhone(phone);

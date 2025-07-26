@@ -30,6 +30,11 @@ namespace TourMate.UserService.Repositories.Repositories
             return await _context.Customers.FirstOrDefaultAsync(x => x.AccountId == accId);
         }
 
+        public async Task<Customer> GetById(int id)
+        {
+            return await _context.Customers.Include(a => a.Account).FirstOrDefaultAsync(x => x.CustomerId == id);
+        }
+
         public async Task<Customer> GetByPhone(string phone)
         {
             return await _context.Customers.FirstOrDefaultAsync(x => x.Phone == phone);

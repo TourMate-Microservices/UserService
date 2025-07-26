@@ -13,6 +13,7 @@ namespace TourMate.UserService.Api.Controllers
         {
             _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
         }
+
         [HttpGet("get-by-accid/{accId}")]
         public async Task<IActionResult> GetByAccId(int accId)
         {
@@ -23,6 +24,18 @@ namespace TourMate.UserService.Api.Controllers
             }
             return Ok(customer);
         }
+
+        [HttpGet("get-by-id/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var customer = await _customerService.GetCustomerById(id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+            return Ok(customer);
+        }
+
         [HttpGet("get-by-phone/{phone}")]
         public async Task<IActionResult> GetByPhone(string phone)
         {
@@ -33,6 +46,7 @@ namespace TourMate.UserService.Api.Controllers
             }
             return Ok(customer);
         }
+
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] Customer customer)
         {

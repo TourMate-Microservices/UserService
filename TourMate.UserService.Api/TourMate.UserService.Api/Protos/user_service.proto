@@ -14,6 +14,10 @@ message GetTourGuideByIdRequest {
     int32 tourGuideId = 1;
 }
 
+message GetCustomerByIdRequest {
+    int32 customerId = 1;
+}
+
 // User message
 message User {
     int32 id = 1;
@@ -35,6 +39,16 @@ message TourGuideResponse {
     int32 yearOfExperience = 4;
     string description = 5;
     string company = 6;
+    string phone = 7;
+}
+
+message CustomerResponse {
+    int32 customerId = 1;
+    string fullName = 2;
+    string image = 3;
+    string gender = 4;
+    string phone = 5;
+    string email = 6;
 }
 
 // Area Data message for other areas
@@ -67,6 +81,7 @@ message AreaTourGuideResponse {
 // gRPC service definition
 service UserService {
     rpc GetTourGuideById(GetTourGuideByIdRequest) returns (TourGuideResponse);
+    rpc GetCustomerById(GetCustomerByIdRequest) returns (CustomerResponse);
     rpc GetUser(GetUserByIdRequest) returns (User);
     rpc GetNumTourGuideByAreaId(GetAreaDetailRequest) returns (AreaTourGuideResponse);
 }
