@@ -59,10 +59,13 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 // Add gRPC client
 builder.Services.AddScoped<ITourServiceGrpcClient, TourServiceGrpcClient>();
+builder.Services.AddScoped<IUserGrpcClient, UserGrpcClient>();
+builder.Services.AddScoped<IFeedbackGrpcService, FeedbackGrpcService>();
 
 // Add gRPC server and UserGrpcService
 builder.Services.AddGrpc();
 builder.Services.AddScoped<UserGrpcService>();
+builder.Services.AddScoped<FeedbackGrpcService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -118,6 +121,6 @@ app.MapControllers();
 
 // Map gRPC service
 app.MapGrpcService<UserGrpcService>();
-
+app.MapGrpcService<FeedbackGrpcService>();
 
 app.Run();

@@ -8,14 +8,30 @@ namespace TourMate.UserService.Api.Controllers
     public class GrpcTestController : ControllerBase
     {
         private readonly ITourServiceGrpcClient _tourServiceGrpcClient;
+        private readonly IFeedbackGrpcService _feedbackGrpcService;
         private readonly ILogger<GrpcTestController> _logger;
 
-        public GrpcTestController(ITourServiceGrpcClient tourServiceGrpcClient, ILogger<GrpcTestController> logger)
+        public GrpcTestController(ITourServiceGrpcClient tourServiceGrpcClient, ILogger<GrpcTestController> logger, IFeedbackGrpcService feedbackGrpcService)
         {
             _tourServiceGrpcClient = tourServiceGrpcClient;
             _logger = logger;
+            _feedbackGrpcService = feedbackGrpcService;
         }
-
+        [HttpGet("feedbacks")]
+        public async Task<IActionResult> GetFeedbacksForTourGuide(int tourGuideId, int page = 1, int size = 10)
+        {
+            try
+            {
+                _logger.LogInformation("Testing gRPC call for tourGuideId: {TourGuideId}", tourGuideId);
+                var feedbacks = await _feedbackGrpcService.GetFeedbacksForTourGuide(tourGuideId, page, size);
+                return Ok(feedbacks);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error testing gRPC call for tourGuideId: {TourGuideId}", tourGuideId);
+                return StatusCode(500, new { message = "Error calling FeedbackService via gRPC", error = ex.Message });
+            }
+        }
         /// <summary>
         /// Test gRPC call to get tours by tour guide ID
         /// </summary>
@@ -27,9 +43,9 @@ namespace TourMate.UserService.Api.Controllers
             try
             {
                 _logger.LogInformation("Testing gRPC call for tourGuideId: {TourGuideId}", tourGuideId);
-                
+
                 var tours = await _tourServiceGrpcClient.GetToursByTourGuideIdAsync(tourGuideId);
-                
+
                 var result = new
                 {
                     TourGuideId = tourGuideId,

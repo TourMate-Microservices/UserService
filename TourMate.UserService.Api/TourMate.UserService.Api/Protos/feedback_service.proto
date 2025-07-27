@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package feedback;
+
+option csharp_namespace = "FeedbackServiceGrpc";
+option go_package = "feedback";
+
+// The feedback service definition
+service FeedbackService {
+  rpc GetFeedbackOfTourGuide (TourGuideRequest) returns (FeedbackResponse);
+}
+
+// The request message containing the tour guide ID
+message TourGuideRequest {
+  int32 tour_guide_id = 1;
+}
+
+// The response message containing feedback data
+message FeedbackResponse {
+  int32 total_pages = 1;
+  int32 total_count = 2;
+  bool has_next_page = 3;
+  int32 per_page = 4;
+  bool has_previous = 5;
+  repeated FeedbackItem data = 6;
+}
+
+// Represents a single feedback item
+message FeedbackItem {
+  int32 invoice_id = 1;
+  int32 service_id = 2;
+  int32 customer_id = 3;
+  int32 rating = 4;
+  string created_date = 5;  // ISO 8601 format recommended
+  string content = 6;
+}

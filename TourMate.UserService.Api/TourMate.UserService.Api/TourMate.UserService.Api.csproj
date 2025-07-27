@@ -24,9 +24,10 @@
     <ProjectReference Include="..\TourMate.UserService.Services\TourMate.UserService.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="Protos\tour_service.proto" GrpcServices="Client" />
-    <Protobuf Include="Protos\user_service.proto" GrpcServices="Server" />
-  </ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="Protos\tour_service.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\user_service.proto" GrpcServices="Both" />
+		<Protobuf Include="Protos\feedback_service.proto" GrpcServices="Both" />
+	</ItemGroup>
 
 </Project>
