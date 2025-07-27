@@ -43,6 +43,16 @@ namespace TourMate.UserService.Api.Controllers
             }
         }
 
+        [HttpGet("from-account/{accountId}")]
+        public async Task<IActionResult> GetTourGuideFromAccount(int accountId)
+        {
+            var result = await _tourGuideService.GetTourGuideByAccId(accountId);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
         [HttpGet("paged")]
         public async Task<IActionResult> GetPagedTourGuides([FromQuery] string? fullName, [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
         {
