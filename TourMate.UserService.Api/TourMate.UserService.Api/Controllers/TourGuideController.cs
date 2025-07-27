@@ -5,7 +5,6 @@ using TourMate.UserService.Repositories.Models;
 using TourMate.UserService.Repositories.ResponseModels;
 using TourMate.UserService.Services.IServices;
 using TourMate.UserService.Services.Services;
-using userservice;
 
 namespace TourMate.UserService.Api.Controllers
 {
@@ -15,14 +14,12 @@ namespace TourMate.UserService.Api.Controllers
     {
         private readonly ITourGuideService _tourGuideService;
         private readonly ITourServiceGrpcClient _tourServiceGrpcClient;
-        private readonly IUserGrpcClient _userGrpcClient;
 
 
-        public TourGuideController(ITourGuideService tourGuideService, ITourServiceGrpcClient tourServiceGrpcClient, IUserGrpcClient userGrpcClient)
+        public TourGuideController(ITourGuideService tourGuideService, ITourServiceGrpcClient tourServiceGrpcClient)
         {
             _tourGuideService = tourGuideService ?? throw new ArgumentNullException(nameof(tourGuideService));
             _tourServiceGrpcClient = tourServiceGrpcClient ?? throw new ArgumentNullException(nameof(tourServiceGrpcClient));
-            _userGrpcClient = userGrpcClient ?? throw new ArgumentNullException(nameof(userGrpcClient));
         }
 
         [HttpGet("get-list")]
@@ -54,11 +51,11 @@ namespace TourMate.UserService.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TourGuideResponse>> GetById(int id)
+        public async Task<ActionResult<TourGuide>> getById(int id)
         {
             try
             {
-                var result = await _userGrpcClient.GetTourGuideByIdAsync(id);
+                var result = await _tourGuideService.GetTourGuideById(id);
                 return Ok(result);
             }
             catch (Exception ex)

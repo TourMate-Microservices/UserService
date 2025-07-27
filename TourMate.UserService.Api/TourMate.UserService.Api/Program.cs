@@ -59,8 +59,6 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 // Add gRPC client
 builder.Services.AddScoped<ITourServiceGrpcClient, TourServiceGrpcClient>();
-builder.Services.AddScoped<IUserGrpcClient, UserGrpcClient>();
-
 
 // Add gRPC server and UserGrpcService
 builder.Services.AddGrpc();
