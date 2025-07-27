@@ -15,5 +15,6 @@ namespace TourMate.UserService.Repositories.IRepositories
         Task<Customer> GetByPhone(string phone);
         Task<bool> CreateAsync(Customer customer);
         Task<PagedResult<Customer>> GetPagedCustomer(int pageSize, int pageIndex, string fullName);
+        Task<Dictionary<int, Customer>> GetCustomersFromIds(HashSet<int> ids);
     }
 }

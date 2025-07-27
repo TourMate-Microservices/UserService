@@ -43,5 +43,10 @@ namespace TourMate.UserService.Services.Services
         {
             return await _repository.GetPagedCustomer(pageSize, pageIndex, fullName);
         }
+
+        public async Task<Dictionary<int, Customer>> GetCustomersFromIds(HashSet<int> ids)
+        {
+            return await _repository.GetCustomersFromIds(ids);
+        }
     }
 }

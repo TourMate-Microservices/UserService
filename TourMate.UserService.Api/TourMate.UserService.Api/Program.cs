@@ -9,23 +9,23 @@ using TourMate.UserService.Services.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.WebHost.UseUrls("http://0.0.0.0:5000");
+builder.WebHost.UseUrls("http://0.0.0.0:5000");
 
-//// Configure Kestrel to listen on both HTTP and gRPC ports
-//builder.WebHost.ConfigureKestrel(options =>
-//{
-//    // HTTP endpoint for REST API
-//    options.ListenAnyIP(5000, listenOptions =>
-//    {
-//        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1;
-//    });
-    
-//    // gRPC endpoint
-//    options.ListenAnyIP(9092, listenOptions =>
-//    {
-//        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2;
-//    });
-//});
+// Configure Kestrel to listen on both HTTP and gRPC ports
+builder.WebHost.ConfigureKestrel(options =>
+{
+    // HTTP endpoint for REST API
+    options.ListenAnyIP(5000, listenOptions =>
+    {
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1;
+    });
+
+    // gRPC endpoint
+    options.ListenAnyIP(9092, listenOptions =>
+    {
+        listenOptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2;
+    });
+});
 
 // Đăng ký CORS
 builder.Services.AddCors(options =>

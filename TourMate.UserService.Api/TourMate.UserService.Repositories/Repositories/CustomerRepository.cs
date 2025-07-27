@@ -88,5 +88,15 @@ namespace TourMate.UserService.Repositories.Repositories
                 has_previous = pageIndex > 1
             };
         }
+
+        public async Task<Dictionary<int, Customer>> GetCustomersFromIds(HashSet<int> ids)
+        {
+            var query = _context.Customers.AsQueryable();
+            if (ids != null && ids.Count > 0)
+            {
+                query = query.Where(c => ids.Contains(c.CustomerId));
+            }
+            return await query.ToDictionaryAsync(c => c.CustomerId, c => c);
+        }
     }
 }
