@@ -16,5 +16,6 @@ namespace TourMate.UserService.Repositories.ResponseModels
         public int Rating { get; set; }
         public int InvoiceId { get; set; }
         public string Content { get; set; }
+        public int ServiceId { get; set; }
     }
 }

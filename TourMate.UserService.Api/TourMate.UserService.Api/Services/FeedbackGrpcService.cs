@@ -51,14 +51,32 @@ namespace TourMate.UserService.Api.Services
 
                 var request = new TourGuideRequest
                 {
-                    TourGuideId = tourGuideId
+                    TourGuideId = tourGuideId                    
                 };
 
                 var response = await _client.GetFeedbackOfTourGuideAsync(request);
 
                 _logger.LogInformation("Response is: {response}\n", response);
-
-                return null;
+                if (response != null)
+                {
+                    return null;
+                }
+                var feedbacks = response.Data.Select(f => new Feedback
+                {
+                    FeedbackId = f.FeedbackId,
+                    CustomerAvatar = "",
+                    CustomerName = "",
+                    CustomerId = f.CustomerId,
+                    Date = DateTime.Parse(f.CreatedDate),
+                    Rating = f.Rating,
+                    InvoiceId = f.InvoiceId,
+                    Content = f.Content,
+                    ServiceId = f.ServiceId
+                }).ToList();
+                return new PagedResult<Feedback>
+                {
+                    data = feedbacks,
+                };
             }
             catch (Exception ex)
             {

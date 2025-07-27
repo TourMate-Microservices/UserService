@@ -3,7 +3,7 @@ syntax = "proto3";
 package feedback;
 
 option csharp_namespace = "FeedbackServiceGrpc";
-option go_package = "feedback";
+//option go_package = "feedback";
 
 // The feedback service definition
 service FeedbackService {
@@ -33,4 +33,5 @@ message FeedbackItem {
   int32 rating = 4;
   string created_date = 5;  // ISO 8601 format recommended
   string content = 6;
+  int32 feedbackId = 7;
 }
