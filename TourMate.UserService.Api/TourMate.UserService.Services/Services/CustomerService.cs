@@ -45,9 +45,9 @@ namespace TourMate.UserService.Services.Services
             return await _repository.GetPagedCustomer(pageSize, pageIndex, fullName);
         }
 
-        public Task<bool> UpdateCustomer(int cuustomerId, CustomerUpdateRequest request)
+        public async Task<bool> UpdateCustomer(int customerId, CustomerUpdateRequest request)
         {
-            throw new NotImplementedException();
+            return await _repository.UpdateCustomer(customerId, request);
         }
     }
 }
