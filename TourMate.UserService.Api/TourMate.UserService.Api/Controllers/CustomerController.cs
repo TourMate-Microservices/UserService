@@ -36,6 +36,18 @@ namespace TourMate.UserService.Api.Controllers
             return Ok(customer);
         }
 
+        [HttpGet("get-by-account/{id}")]
+        public async Task<IActionResult> GetByAccountId(int id)
+        {
+            var customer = await _customerService.GetCustomerByAccId(id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+            return Ok(customer);
+        }
+
+
         [HttpGet("get-by-phone/{phone}")]
         public async Task<IActionResult> GetByPhone(string phone)
         {
