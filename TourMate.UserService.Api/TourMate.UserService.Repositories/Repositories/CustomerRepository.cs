@@ -94,6 +94,11 @@ namespace TourMate.UserService.Repositories.Repositories
         {
             try
             {
+                var customerWithSamePhone = await _context.Customers.FirstOrDefaultAsync(x => x.Phone == request.Phone);
+                if (customerWithSamePhone != null && customerWithSamePhone.CustomerId != customerId)
+                {
+                    return false;
+                }
                 var customer = await _context.Customers.FirstOrDefaultAsync(x => x.CustomerId == customerId);
                 if (customer == null)
                 {
