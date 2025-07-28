@@ -43,16 +43,6 @@ namespace TourMate.UserService.Api.Controllers
             }
         }
 
-        [HttpGet("from-account/{accountId}")]
-        public async Task<IActionResult> GetTourGuideFromAccount(int accountId)
-        {
-            var result = await _tourGuideService.GetTourGuideByAccId(accountId);
-            if (result == null)
-                return NotFound();
-
-            return Ok(result);
-        }
-
         [HttpGet("paged")]
         public async Task<IActionResult> GetPagedTourGuides([FromQuery] string? fullName, [FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
         {
@@ -66,6 +56,40 @@ namespace TourMate.UserService.Api.Controllers
             try
             {
                 var result = await _tourGuideService.GetTourGuideById(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Something went wrong", error = ex.Message });
+            }
+        }
+
+        [HttpGet("profile/{id}")]
+        public async Task<ActionResult<TourGuideProfileResponse>> GetTourGuideForProfile(int id)
+        {
+            try
+            {
+                var tourGuide = await _tourGuideService.GetTourGuideById(id);
+                var result = new TourGuideProfileResponse
+                {
+                    TourGuideId = tourGuide.TourGuideId,
+                    FullName = tourGuide.FullName,
+                    Image = tourGuide.Image,
+                    BannerImage = tourGuide.BannerImage,
+                    Description = tourGuide.Description,
+                    YearOfExperience = tourGuide.YearOfExperience,
+                    Company = tourGuide.Company,
+                    AreaId = tourGuide.AreaId,
+                    AccountId = tourGuide.AccountId,
+                    Address = tourGuide.Address,
+                    Phone = tourGuide.Phone,
+                    IsVerified = tourGuide.IsVerified,
+                    BankAccountNumber = tourGuide.BankAccountNumber,
+                    BankName = tourGuide.BankName,
+                    DateOfBirth = tourGuide.DateOfBirth,
+                    Gender = tourGuide.Gender,                    
+                };
+                var tours = await _tourServiceGrpcClient.GetToursByTourGuideIdAsync(id);
                 return Ok(result);
             }
             catch (Exception ex)
