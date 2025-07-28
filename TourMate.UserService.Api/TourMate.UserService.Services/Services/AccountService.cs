@@ -53,7 +53,7 @@ namespace TourMate.UserService.Services.Services
             if (user.Role.RoleName == "Customer")
             {
                 var customer = await _customerService.GetCustomerByAccId(user.AccountId);
-                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, customer.FullName, "Customer");
+                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, customer.FullName, "Customer", customer.CustomerId);
 
                 return new AuthResponse
                 {
@@ -64,7 +64,7 @@ namespace TourMate.UserService.Services.Services
             if (user.Role.RoleName == "TourGuide")
             {
                 var tourGuide = await _tourGuideService.GetTourGuideByAccId(user.AccountId);
-                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, tourGuide.FullName, "TourGuide");
+                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, tourGuide.FullName, "TourGuide", tourGuide.TourGuideId);
 
                 return new AuthResponse
                 {
@@ -74,7 +74,7 @@ namespace TourMate.UserService.Services.Services
 
             if (user.Role.RoleName == "Admin")
             {
-                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, "Admin", "Admin");
+                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, "Admin", "Admin", -1);
 
                 return new AuthResponse
                 {
