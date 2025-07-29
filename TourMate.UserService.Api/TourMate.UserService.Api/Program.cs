@@ -30,16 +30,15 @@ builder.WebHost.UseUrls("http://0.0.0.0:5000");
 // Đăng ký CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", builder =>
+    options.AddPolicy("AllowAll", builder =>
     {
-        builder.WithOrigins(
-            "http://localhost:3000"
-        )
-        .AllowAnyHeader()
-        .AllowAnyMethod()
-        .AllowCredentials();
+        builder
+            .AllowAnyOrigin()         // ⚠️ Không dùng cùng AllowCredentials
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
+
 
 // Add services to the container.
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
@@ -94,7 +93,7 @@ app.UsePathBase("/user-service");
 
 app.UseRouting();
 
-app.UseCors("AllowReactApp");
+app.UseCors("AllowAll");
 
 
 // Configure the HTTP request pipeline.
