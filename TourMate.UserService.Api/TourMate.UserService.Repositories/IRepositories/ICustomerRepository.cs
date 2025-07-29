@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.RequestModels;
 using TourMate.UserService.Repositories.ResponseModels;
 
 namespace TourMate.UserService.Repositories.IRepositories
@@ -15,5 +16,6 @@ namespace TourMate.UserService.Repositories.IRepositories
         Task<Customer> GetByPhone(string phone);
         Task<bool> CreateAsync(Customer customer);
         Task<PagedResult<Customer>> GetPagedCustomer(int pageSize, int pageIndex, string fullName);
+        Task<bool> UpdateCustomer(int customerId, CustomerUpdateRequest request);
     }
 }

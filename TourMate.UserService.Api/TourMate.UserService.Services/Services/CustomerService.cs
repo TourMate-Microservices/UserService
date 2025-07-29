@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TourMate.UserService.Repositories.IRepositories;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.RequestModels;
 using TourMate.UserService.Repositories.ResponseModels;
 using TourMate.UserService.Services.IServices;
 
@@ -42,6 +43,11 @@ namespace TourMate.UserService.Services.Services
         public async Task<PagedResult<Customer>> GetPagedCustomersAsync(int pageIndex, int pageSize, string fullName)
         {
             return await _repository.GetPagedCustomer(pageSize, pageIndex, fullName);
+        }
+
+        public async Task<bool> UpdateCustomer(int customerId, CustomerUpdateRequest request)
+        {
+            return await _repository.UpdateCustomer(customerId, request);
         }
     }
 }

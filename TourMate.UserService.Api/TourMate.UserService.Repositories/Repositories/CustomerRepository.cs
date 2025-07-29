@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TourMate.UserService.Repositories.Context;
 using TourMate.UserService.Repositories.IRepositories;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.RequestModels;
 using TourMate.UserService.Repositories.ResponseModels;
 
 namespace TourMate.UserService.Repositories.Repositories
@@ -87,6 +88,34 @@ namespace TourMate.UserService.Repositories.Repositories
                 has_next = pageIndex < totalPages,
                 has_previous = pageIndex > 1
             };
+        }
+
+        public async Task<bool> UpdateCustomer(int customerId, CustomerUpdateRequest request)
+        {
+            try
+            {
+                var customerWithSamePhone = await _context.Customers.FirstOrDefaultAsync(x => x.Phone == request.Phone);
+                if (customerWithSamePhone != null && customerWithSamePhone.CustomerId != customerId)
+                {
+                    return false;
+                }
+                var customer = await _context.Customers.FirstOrDefaultAsync(x => x.CustomerId == customerId);
+                if (customer == null)
+                {
+                    return false;
+                }
+                customer.FullName = request.FullName;
+                customer.DateOfBirth = request.DateOfBirth;
+                customer.Phone = request.Phone;
+                customer.Gender = request.Gender;
+                customer.Image = request.Image;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception ex) 
+            {
+                return false;
+            }
         }
     }
 }
