@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TourMate.UserService.Repositories.Context;
 using TourMate.UserService.Repositories.IRepositories;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.RequestModels;
 
 namespace TourMate.UserService.Repositories.Repositories
 {
@@ -23,6 +24,7 @@ namespace TourMate.UserService.Repositories.Repositories
         {
             _context = context;
         }
+
 
         public async Task<Account> GetAccountByLogin(string email, string password)
         {

@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourMate.UserService.Repositories.IRepositories;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.RequestModels;
 using TourMate.UserService.Repositories.ResponseModels;
 using TourMate.UserService.Services.IServices;
 using TourMate.UserService.Services.Utils;
@@ -17,13 +19,16 @@ namespace TourMate.UserService.Services.Services
         private readonly TokenService _tokenService;
         private readonly ICustomerService _customerService;
         private readonly ITourGuideService _tourGuideService;
+        private readonly ILogger<AccountService> _logger;
 
-        public AccountService(IAccountRepository repo, TokenService tokenService, ICustomerService customerService, ITourGuideService tourGuideService)
+
+        public AccountService(IAccountRepository repo, TokenService tokenService, ICustomerService customerService, ITourGuideService tourGuideService, ILogger<AccountService> logger)
         {
             _repository = repo;
             _tokenService = tokenService;
             _customerService = customerService;
             _tourGuideService = tourGuideService;
+            _logger =    logger;
         }
 
         public async Task<Account> GetAccountByEmail(string email)
@@ -53,7 +58,8 @@ namespace TourMate.UserService.Services.Services
             if (user.Role.RoleName == "Customer")
             {
                 var customer = await _customerService.GetCustomerByAccId(user.AccountId);
-                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, customer.FullName, "Customer", customer.CustomerId);
+                _logger.LogInformation("Customer login: {FullName}, ID: {CustomerId}", customer.FullName, customer.CustomerId);
+                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, customer.FullName, "Customer", customer.CustomerId, user.RoleId);
 
                 return new AuthResponse
                 {
@@ -64,7 +70,7 @@ namespace TourMate.UserService.Services.Services
             if (user.Role.RoleName == "TourGuide")
             {
                 var tourGuide = await _tourGuideService.GetTourGuideByAccId(user.AccountId);
-                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, tourGuide.FullName, "TourGuide", tourGuide.TourGuideId);
+                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, tourGuide.FullName, "TourGuide", tourGuide.TourGuideId, user.RoleId);
 
                 return new AuthResponse
                 {
@@ -74,7 +80,7 @@ namespace TourMate.UserService.Services.Services
 
             if (user.Role.RoleName == "Admin")
             {
-                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, "Admin", "Admin", -1);
+                var accessToken = _tokenService.GenerateAccessToken(user.AccountId, "Admin", "Admin", -1, 1);
 
                 return new AuthResponse
                 {

@@ -8,7 +8,7 @@ namespace TourMate.UserService.Api.Services
         Task<TourServiceList> GetToursByTourGuideIdAsync(int tourGuideId);
         Task<TourServiceList> GetNumOfTourByTourGuideId(int tourGuideId, int numOfTours);
     }
-    public class TourServiceGrpcClient : ITourServiceGrpcClient, IDisposable
+    public class TourServiceGrpcClient : ITourServiceGrpcClient 
     {
         private readonly GrpcChannel _channel;
         private readonly TourService.TourServiceClient _client;

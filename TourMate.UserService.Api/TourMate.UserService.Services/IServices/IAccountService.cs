@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using TourMate.UserService.Repositories.Models;
 using TourMate.UserService.Repositories.ResponseModels;
+using TourMate.UserService.Repositories.RequestModels;
+
 
 namespace TourMate.UserService.Services.IServices
 {
@@ -14,5 +16,6 @@ namespace TourMate.UserService.Services.IServices
         Task<Account> GetAccountByIdAsync(int accountId);
         Task<Account> CreateAccount(Account account);
         Task<AuthResponse> LoginAsync(string email, string password);
+
     }
 }

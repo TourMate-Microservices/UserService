@@ -18,7 +18,7 @@ namespace TourMate.UserService.Services.Utils
             _config = config;
         }
 
-        public string GenerateAccessToken(int accountId, string fullName, string roleName, int suppliedId)
+        public string GenerateAccessToken(int accountId, string fullName, string roleName, int suppliedId, int roleId)
         {
             // Lấy khóa bảo mật từ cấu hình
             var key = _config["Jwt:Key"];
@@ -35,7 +35,8 @@ namespace TourMate.UserService.Services.Utils
                 new Claim("AccountId", accountId.ToString()),
                 new Claim("FullName", fullName),
                 new Claim(ClaimTypes.Role, roleName),
-                new Claim("SuppliedId", suppliedId.ToString())
+                new Claim("SuppliedId", suppliedId.ToString()),
+                new Claim("RoleId", roleId.ToString())
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

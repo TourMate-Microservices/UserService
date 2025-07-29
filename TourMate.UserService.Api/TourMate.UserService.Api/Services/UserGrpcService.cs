@@ -1,5 +1,8 @@
 using Grpc.Core;
+using Microsoft.EntityFrameworkCore;
+using TourMate.UserService.Repositories.Models;
 using TourMate.UserService.Services.IServices;
+using TourMate.UserService.Services.Services;
 using userservice;
 
 namespace TourMate.UserService.Api.Services
@@ -18,6 +21,97 @@ namespace TourMate.UserService.Api.Services
             _logger = logger;
             _customerService = customerService;
         }
+
+        public override async Task<SenderRoleResponse> GetSenderRole( SenderIdRequest request, ServerCallContext context)
+        {
+            _logger.LogInformation("Getting sender role for senderId: {SenderId}", request.SenderId);
+            var account = await _accountService.GetAccountByIdAsync(request.SenderId);
+            if (account == null)
+            {
+                _logger.LogWarning("Account with ID {SenderId} not found", request.SenderId);
+                throw new RpcException(new Status(StatusCode.NotFound, $"Account with ID {request.SenderId} not found"));
+            }
+            var response = new SenderRoleResponse
+            {
+                RoleId = account.Role.RoleId,
+                SenderId = account.AccountId,
+            };
+            _logger.LogInformation("Sender role retrieved: RoleId={RoleId}", response.RoleId);
+            return response;
+        }
+
+        public override async Task<UserInfoResponse> GetBasicUserInfo(UserIdRequest request, ServerCallContext context)
+        {
+            _logger.LogInformation("=== GetBasicUserInfo START === userId: {UserId}, ClientAddress: {ClientAddress}", 
+                request.UserId, context.Peer);
+
+            var ressult = await _accountService.GetAccountByIdAsync(request.UserId);
+            _logger.LogInformation("Account query result: {IsNull}", ressult == null ? "NULL" : "FOUND");
+
+            var info = new UserInfo(); // default (empty)
+
+            if (ressult == null)
+            {
+                _logger.LogWarning("Account not found for userId: {UserId}, returning empty UserInfo", request.UserId);
+                var emptyResponse = new UserInfoResponse { User = info };
+                _logger.LogInformation("=== GetBasicUserInfo END (NULL) === Returning: AccountId={AccountId}, FullName='{FullName}', RoleId={RoleId}", 
+                    info.AccountId, info.FullName, info.RoleId);
+                return emptyResponse;
+            }
+
+            if (ressult.RoleId == 3) // TourGuide
+            {
+                _logger.LogInformation("Account found - RoleId: {RoleId}, processing as TourGuide", ressult.RoleId);
+                var tourGuide = await _tourGuideService.GetTourGuideByAccId(request.UserId);
+                if (tourGuide != null)
+                {
+                    info = new UserInfo
+                    {
+                        AccountId = tourGuide.AccountId,
+                        FullName = tourGuide.FullName,
+                        Image = tourGuide.Image ?? "",
+                        RoleId = 3 // TourGuide
+                    };
+                    _logger.LogInformation("TourGuide info set: AccountId={AccountId}, FullName='{FullName}'", 
+                        info.AccountId, info.FullName);
+                }
+                else
+                {
+                    _logger.LogWarning("TourGuide not found for AccountId: {AccountId}", request.UserId);
+                }
+            }
+            else if (ressult.RoleId == 2) // Customer
+            {
+                _logger.LogInformation("Account found - RoleId: {RoleId}, processing as Customer", ressult.RoleId);
+                var customer = await _customerService.GetCustomerByAccId(request.UserId);
+                if (customer != null)
+                {
+                    info = new UserInfo
+                    {
+                        AccountId = customer.AccountId,
+                        FullName = customer.FullName,
+                        Image = customer.Image ?? "",
+                        RoleId = 2, // Customer
+                    };
+                    _logger.LogInformation("Customer info set: AccountId={AccountId}, FullName='{FullName}'", 
+                        info.AccountId, info.FullName);
+                }
+                else
+                {
+                    _logger.LogWarning("Customer not found for AccountId: {AccountId}", request.UserId);
+                }
+            }
+            else
+            {
+                _logger.LogWarning("Unknown RoleId: {RoleId} for AccountId: {AccountId}", ressult.RoleId, request.UserId);
+            }
+
+            var response = new UserInfoResponse { User = info };
+            _logger.LogInformation("=== GetBasicUserInfo END === Returning: AccountId={AccountId}, FullName='{FullName}', RoleId={RoleId}", 
+                info.AccountId, info.FullName, info.RoleId);
+            return response;
+        }
+
 
         public override async Task<User> GetUser(GetUserByIdRequest request, ServerCallContext context)
         {

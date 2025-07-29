@@ -77,6 +77,31 @@ message AreaTourGuideResponse {
     repeated TourGuideResponse tourGuide = 7;
 }
 
+message UserIdRequest {
+  int32 userId = 1;
+}
+
+message UserInfoResponse {
+  UserInfo user = 1;
+}
+
+message UserInfo {
+  int32 accountId = 1;
+  string fullName = 2;
+  string image = 3;
+  int32 roleId = 4;
+}
+
+message SenderIdRequest {
+	  int32 senderId = 1;
+}
+
+message SenderRoleResponse {
+  int32 senderId = 1;
+  int32 roleId = 2;
+}
+
+
 
 // gRPC service definition
 service UserService {
@@ -84,4 +109,6 @@ service UserService {
     rpc GetCustomerById(GetCustomerByIdRequest) returns (CustomerResponse);
     rpc GetUser(GetUserByIdRequest) returns (User);
     rpc GetNumTourGuideByAreaId(GetAreaDetailRequest) returns (AreaTourGuideResponse);
+    rpc GetBasicUserInfo (UserIdRequest) returns (UserInfoResponse);
+    rpc GetSenderRole (SenderIdRequest) returns (SenderRoleResponse);
 }
