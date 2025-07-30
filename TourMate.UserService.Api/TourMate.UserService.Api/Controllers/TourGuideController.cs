@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TourMate.UserService.Api.Services;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.RequestModels;
 using TourMate.UserService.Repositories.ResponseModels;
 using TourMate.UserService.Services.IServices;
 using TourMate.UserService.Services.Services;
@@ -227,6 +228,30 @@ namespace TourMate.UserService.Api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { message = "Internal Server Error", error = ex.Message });
+            }
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTourGuide(int id, [FromBody] TourGuideUpdateRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest("Invalid request data.");
+            }
+            try
+            {
+                var result = await _tourGuideService.UpdateTourGuide(id, request);
+                if (result)
+                {
+                    return Ok(new { Message = "Tour guide updated successfully." });
+                }
+                else
+                {
+                    return NotFound(new { Message = "Tour guide not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while updating the tour guide.", Error = ex.Message });
             }
         }
     }

@@ -1,12 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TourMate.UserService.Repositories.Context;
 using TourMate.UserService.Repositories.IRepositories;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.RequestModels;
 using TourMate.UserService.Repositories.ResponseModels;
 
 namespace TourMate.UserService.Repositories.Repositories
@@ -166,6 +162,46 @@ namespace TourMate.UserService.Repositories.Repositories
 
 
             return result;
+        }
+
+        public async Task<bool> UpdateTourGuide(int id, TourGuideUpdateRequest request)
+        {
+            try
+            {
+                var checkDuplicatedInfo = _context.TourGuides.Where(x => 
+                    x.BankAccountNumber == request.BankAccountNumber || x.Phone == request.Phone
+                );
+                if (checkDuplicatedInfo.Any(x => x.TourGuideId != id))
+                {
+                    return false; // Thông tin đã tồn tại
+                }
+                var currentInfo = checkDuplicatedInfo.FirstOrDefault(x => x.TourGuideId == id);
+                if (currentInfo == null)
+                {
+                    return false; // Không tìm thấy thông tin hiện tại
+                }
+                currentInfo.FullName = request.FullName;
+                currentInfo.Image = request.Image;
+                currentInfo.BannerImage = request.BannerImage;
+                currentInfo.Description = request.Description;
+                currentInfo.YearOfExperience = request.YearOfExperience;
+                currentInfo.Company = request.Company;
+                currentInfo.AreaId = request.AreaId;
+                currentInfo.Address = request.Address;
+                currentInfo.Phone = request.Phone;
+                currentInfo.BankAccountNumber = request.BankAccountNumber;
+                currentInfo.BankName = request.BankName;
+                currentInfo.DateOfBirth = request.DateOfBirth;
+                currentInfo.Description = request.Description;
+                _context.Update(currentInfo);
+                await _context.SaveChangesAsync();
+                return true; // Cập nhật thành công
+            }
+            catch (Exception ex)
+            {
+                // Xử lý lỗi nếu cần
+                return false;
+            }
         }
     }
 }

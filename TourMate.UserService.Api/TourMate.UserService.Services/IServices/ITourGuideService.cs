@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TourMate.UserService.Repositories.Models;
+using TourMate.UserService.Repositories.RequestModels;
 using TourMate.UserService.Repositories.ResponseModels;
 
 namespace TourMate.UserService.Services.IServices
@@ -18,6 +19,6 @@ namespace TourMate.UserService.Services.IServices
         Task<PagedResult<TourGuide>> GetPagedTourGuidesAsync(int pageIndex, int pageSize, string? fullName);
         Task<PagedResult<TourGuide>> GetTourGuidesByAreaAsync(int areaId, int pageIndex, int pageSize);
         Task<List<TourGuide>> GetOtherTourGuidesAsync(int tourGuideId, int pageSize);
-
+        Task<bool> UpdateTourGuide(int id, TourGuideUpdateRequest request);
     }
 }

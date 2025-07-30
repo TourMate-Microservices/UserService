@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TourMate.UserService.Repositories.IRepositories;
 using TourMate.UserService.Repositories.Models;
 using TourMate.UserService.Repositories.Repositories;
+using TourMate.UserService.Repositories.RequestModels;
 using TourMate.UserService.Repositories.ResponseModels;
 using TourMate.UserService.Services.IServices;
 
@@ -57,6 +58,11 @@ namespace TourMate.UserService.Services.Services
         public async Task<List<TourGuide>> GetOtherTourGuidesAsync(int tourGuideId, int pageSize)
         {
             return await _repository.GetOtherTourGuides(tourGuideId, pageSize);
+        }
+
+        public async Task<bool> UpdateTourGuide(int id, TourGuideUpdateRequest request)
+        {
+            return await _repository.UpdateTourGuide(id, request);
         }
     }
 }
