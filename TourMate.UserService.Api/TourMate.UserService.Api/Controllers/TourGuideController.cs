@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using TourMate.UserService.Api.Services;
 using TourMate.UserService.Repositories.Models;
 using TourMate.UserService.Repositories.RequestModels;
@@ -75,7 +76,7 @@ namespace TourMate.UserService.Api.Controllers
         }
 
         [HttpGet("profile/{id}")]
-        public async Task<ActionResult<TourGuideProfileResponse>> GetTourGuideForProfile(int id)
+        public async Task<ActionResult<TourGuideProfileResponse>> GetTourGuideForProfile(int id, int page = 1, int perPage = 3)
         {
             try
             {
@@ -97,9 +98,39 @@ namespace TourMate.UserService.Api.Controllers
                     BankAccountNumber = tourGuide.BankAccountNumber,
                     BankName = tourGuide.BankName,
                     DateOfBirth = tourGuide.DateOfBirth,
-                    Gender = tourGuide.Gender,                    
+                    Gender = tourGuide.Gender,
                 };
                 var tours = await _tourServiceGrpcClient.GetToursByTourGuideIdAsync(id);
+                var totalTours = tours.Items.Count;
+                var totalPages = (int)Math.Ceiling((double)totalTours / perPage);
+
+                // 3. Lấy tour theo trang hiện tại
+                var pagedTours = tours.Items
+                    .Skip((page - 1) * perPage)
+                    .Take(perPage)
+                    .Select(t => new TourService
+                    {
+                        ServiceId = t.ServiceId,
+                        ServiceName = t.ServiceName,
+                        Title = t.Title,
+                        Image = t.Image,
+                        CreatedDate = DateTime.TryParse(t.CreatedDate, out var createdDate) ? createdDate : default,
+                        Price = t.Price,
+                        Content = t.Content,
+                        Duration = t.Duration,
+                        IsDeleted = t.IsDeleted,
+                        TourDesc = t.TourDesc
+                    }).ToList();
+                result.Tours = new PagedResult<TourService>
+                {
+                    data = pagedTours,
+                    total_count = totalTours,
+                    page = page,
+                    per_page = perPage,
+                    total_pages = totalPages,
+                    has_next = page < totalPages,
+                    has_previous = page > totalPages
+                };
                 return Ok(result);
             }
             catch (Exception ex)
@@ -209,7 +240,7 @@ namespace TourMate.UserService.Api.Controllers
                 // 4. Gộp dữ liệu
                 var result = new TourGuideDetailWithTour
                 {
-                    TourGuide  = guide,
+                    TourGuide = guide,
 
                     Tours = new PagedResult<TourOfTourGuide>
                     {

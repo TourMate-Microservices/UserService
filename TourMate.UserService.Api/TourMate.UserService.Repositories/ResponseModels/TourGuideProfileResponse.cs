@@ -24,6 +24,19 @@ namespace TourMate.UserService.Repositories.ResponseModels
         public string? BankName { get; set; }
         public DateOnly DateOfBirth { get; set; }
         public string Gender { get; set; }
-        public PagedResult<TourOfTourGuide> Tours { get; set; } = new PagedResult<TourOfTourGuide>();
+        public PagedResult<TourService> Tours { get; set; } = new PagedResult<TourService>();
+    }
+    public class TourService
+    {
+        public int ServiceId { get; set; }
+        public string ServiceName { get; set; } = null!;
+        public string Title { get; set; } = null!;
+        public string Image { get; set; } = null!;
+        public DateTime CreatedDate { get; set; }
+        public float Price { get; set; }
+        public string Content { get; set; } = null!;
+        public string Duration { get; set; } = null!;
+        public bool IsDeleted { get; set; }
+        public string TourDesc { get; set; } = null!;
     }
 }
