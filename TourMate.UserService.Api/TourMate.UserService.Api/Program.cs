@@ -30,12 +30,14 @@ builder.WebHost.UseUrls("http://0.0.0.0:5000");
 // Đăng ký CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll", builder =>
+    options.AddPolicy("AllowVercel", policy =>
     {
-        builder
-            .AllowAnyOrigin()         // ⚠️ Không dùng cùng AllowCredentials
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.WithOrigins(
+                 "https://tour-mate-ui.vercel.app",
+                 "http://localhost:3000" // thêm origin này cho dev
+             )
+             .AllowAnyHeader()
+              .AllowAnyMethod();
     });
 });
 
@@ -93,7 +95,7 @@ app.UsePathBase("/user-service");
 
 app.UseRouting();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowVercel");
 
 
 // Configure the HTTP request pipeline.
